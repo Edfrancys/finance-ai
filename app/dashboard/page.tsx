@@ -4,9 +4,9 @@ import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { db } from "../_lib/prisma";
-import { ArrowDownUpIcon } from "lucide-react";
 import { DataTable } from "../_components/ui/data-table";
 import { transactionColumns } from "./transacoes/_columns";
+import ButtonAddTransaction from "../_components/button-add-transaction";
 
 const DashboardPage = async () => {
   const { userId } = auth();
@@ -32,10 +32,7 @@ const DashboardPage = async () => {
       <div className="flex flex-col space-y-6 px-20 py-10">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold">Transações</h1>
-          <Button>
-            Adicionar Transações
-            <ArrowDownUpIcon className="mr-1" />
-          </Button>
+          <ButtonAddTransaction />
         </div>
 
         <DataTable columns={transactionColumns} data={transactions} />
