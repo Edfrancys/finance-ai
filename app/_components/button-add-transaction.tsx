@@ -44,6 +44,7 @@ import {
   TRANSACTION_TYPE_OPTIONS,
 } from "../_constants/transactions";
 import { DatePicker } from "./ui/data-picker";
+import addTransaction from "../_actions/add-transaction";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -77,7 +78,7 @@ const ButtonAddTransaction = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      amount: undefined,
+      amount: 0,
       category: TransactionCategory.OTHER,
       date: new Date(),
       paymentMethod: TransactionPaymentMethod.CASH,
@@ -85,9 +86,13 @@ const ButtonAddTransaction = () => {
     },
   });
 
-  function onSubmitForm(data: FormSchema) {
-    console.log({ data });
-  }
+  const onSubmitForm = async (data: FormSchema) => {
+    try {
+      await addTransaction(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Dialog
@@ -135,7 +140,15 @@ const ButtonAddTransaction = () => {
                 <FormItem>
                   <FormLabel>Valor</FormLabel>
                   <FormControl>
-                    <MoneyInput placeholder="Digite o Valor..." {...field} />
+                    <MoneyInput
+                      placeholder="Digite o Valor..."
+                      onValueChange={({ floatValue }) =>
+                        field.onChange(floatValue)
+                      }
+                      value={field.value}
+                      onBlur={field.onBlur}
+                      disabled={field.disabled}
+                    />
                   </FormControl>
 
                   <FormMessage />
