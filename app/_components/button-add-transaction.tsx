@@ -45,6 +45,7 @@ import {
 } from "../_constants/transactions";
 import { DatePicker } from "./ui/data-picker";
 import addTransaction from "../_actions/add-transaction";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().trim().min(1, {
@@ -74,6 +75,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 const ButtonAddTransaction = () => {
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -89,6 +92,8 @@ const ButtonAddTransaction = () => {
   const onSubmitForm = async (data: FormSchema) => {
     try {
       await addTransaction(data);
+      setDialogIsOpen(false);
+      form.reset();
     } catch (error) {
       console.log(error);
     }
@@ -96,7 +101,9 @@ const ButtonAddTransaction = () => {
 
   return (
     <Dialog
+      open={dialogIsOpen}
       onOpenChange={(open) => {
+        setDialogIsOpen(open);
         if (!open) {
           form.reset();
         }

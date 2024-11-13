@@ -8,6 +8,7 @@ import {
   TransactionType,
 } from "@prisma/client";
 import { addTransactionSchema } from "./schema";
+import { revalidatePath } from "next/cache";
 
 interface AddTransactionParams {
   name: string;
@@ -24,10 +25,10 @@ const addTransaction = async (params: AddTransactionParams) => {
   if (!userId) {
     throw new Error("Unauthorzed");
   }
-  const id = userId;
   await db.transaction.create({
-    data: { ...params, id },
+    data: { ...params, userId },
   });
+  revalidatePath("/dashboard");
 };
 
 export default addTransaction;
