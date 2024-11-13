@@ -1,12 +1,12 @@
 import Image from "next/image";
-import { Button } from "../_components/ui/button";
+import { Button } from "../../_components/ui/button";
 import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { db } from "../_lib/prisma";
-import { DataTable } from "../_components/ui/data-table";
-import { transactionColumns } from "./transacoes/_columns";
-import ButtonAddTransaction from "../_components/button-add-transaction";
+import { db } from "../../_lib/prisma";
+import { DataTable } from "../../_components/ui/data-table";
+import { transactionColumns } from "./_columns";
+import ButtonAddTransaction from "@/app/_components/button-add-transaction";
 
 const DashboardPage = async () => {
   const { userId } = auth();
